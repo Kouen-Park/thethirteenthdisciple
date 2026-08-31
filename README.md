@@ -40,6 +40,22 @@
 
 현재 `SceneArt`는 코드로 만든 임시 연출입니다. 픽셀 배경이나 캐릭터가 준비되면 각 챕터 씬의 `SceneArt` 노드를 `Sprite2D`, `AnimatedSprite2D`, 타일맵 등으로 교체하거나 함께 배치하면 됩니다. 대화와 진행 구조는 그대로 유지됩니다.
 
+## 제1장 완성형 연출
+
+제1장에는 실제 세로형 픽셀아트 배경과 플레이어 제자, 예수와 나귀, 환호하는 군중 스프라이트가 적용되어 있습니다. 공통 챕터 씬의 `BackgroundLayer`는 제1장에서만 활성화되며, `CharacterLayer`의 `CrowdGroup`, `JesusDonkey`, `PlayerDisciple` 노드가 대본 이벤트에 따라 위치·크기·투명도 애니메이션으로 등장합니다. `CharacterLeft`, `CharacterCenter`, `CharacterRight` 슬롯은 이후 등장인물 확장용으로 유지됩니다.
+
+- 배경: `assets/art/chapter01/background.png`
+- 플레이어 제자: `assets/art/chapter01/player_disciple.png`
+- 예수와 나귀: `assets/art/chapter01/jesus_donkey.png`
+- 군중 그룹: `assets/art/chapter01/crowd_group.png`
+- 효과음: `assets/audio/chapter01/`
+- 종려잎 드래그: `scripts/palm_drag_interaction.gd`
+- 대사·연출·사운드 이벤트: `story_data.gd`, `scripts/chapter_scene.gd`
+
+제1장의 종려잎 상호작용은 마우스와 모바일 터치를 모두 지원합니다. 세 장의 종려잎을 빛나는 길 영역으로 끌어 놓으면 이야기가 자동으로 이어집니다. 장면 진입과 종료에는 화면·환경음 페이드가 적용됩니다.
+
+시작 화면은 제1장 배경과 황금빛·짙은 갈색 패널 스타일을 공유합니다. 설정 화면의 전체 음량 슬라이더는 `GameState.master_volume`에 저장되며, 재실행 시 Master 오디오 버스에 자동 적용됩니다. 음량을 0%로 내리면 Master 버스가 음소거됩니다.
+
 ## 실행
 
 Godot 4.7 이상에서 프로젝트를 열고 실행합니다. 기본 시작 씬은 `scenes/menu/main_menu.tscn`입니다.

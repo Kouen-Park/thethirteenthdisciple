@@ -1,0 +1,82 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/chapter_select.gd" id="1"]
+
+[node name="ChapterSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.13, 0.15, 0.19, 1)
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 48.0
+offset_bottom = 80.0
+theme_override_colors/font_color = Color(1, 0.9, 0.64, 1)
+theme_override_font_sizes/font_size = 24
+text = "장 선택"
+horizontal_alignment = 1
+
+[node name="Chapters" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -210.0
+offset_right = 150.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Chapter1" type="Button" parent="Chapters"]
+layout_mode = 2
+text = "제1장 · 예루살렘 입성"
+[node name="Chapter2" type="Button" parent="Chapters"]
+layout_mode = 2
+text = "제2장 · 최후의 만찬"
+[node name="Chapter3" type="Button" parent="Chapters"]
+layout_mode = 2
+text = "제3장 · 겟세마네"
+[node name="Chapter4" type="Button" parent="Chapters"]
+layout_mode = 2
+text = "제4장 · 재판과 십자가의 길"
+[node name="Chapter5" type="Button" parent="Chapters"]
+layout_mode = 2
+text = "제5장 · 골고다"
+[node name="Chapter6" type="Button" parent="Chapters"]
+layout_mode = 2
+text = "제6장 · 부활"
+[node name="Epilogue" type="Button" parent="Chapters"]
+layout_mode = 2
+text = "에필로그 · 오늘의 한 걸음"
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -65.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "처음 화면으로"

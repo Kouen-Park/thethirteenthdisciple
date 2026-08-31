@@ -6,15 +6,20 @@ extends RefCounted
 const CHAPTERS := [
 	{
 		"title": "제1장 · 예루살렘 입성",
-		"place": "예루살렘 성문 밖 · 종려주일",
+		"place": "예루살렘 성문 밖 언덕길 · 종려주일",
 		"palette": {"sky": Color("#e8bd67"), "ground": Color("#b87947"), "accent": Color("#fff1b8")},
 		"lines": [
-			{"speaker": "내레이션", "text": "몇 년을 그분과 함께 걸었지만, 오늘 같은 날은 처음이다. 성문 앞의 함성은 언덕길까지 들려왔다."},
-			{"speaker": "손끝", "text": "군중이 길 위에 종려나무 가지를 놓기 시작했다.", "interaction": {"title": "종려잎을 길에 놓기", "steps": ["첫 번째 종려잎을 펼친다", "두 번째 종려잎을 나란히 놓는다", "마지막 잎을 조심스레 정돈한다"]}},
-			{"speaker": "군중", "text": "호산나! 다윗의 자손이여! 주의 이름으로 오시는 이여, 찬송하리로다!"},
-			{"speaker": "예수", "text": "이들의 외침은 오래가지 못할 것이다. 그러나 지금은… 함께 기뻐하자."},
+			{"speaker": "내레이션", "text": "몇 년을 그분과 함께 걸었지만, 오늘 같은 날은 처음이다.", "event": "establish_scene"},
+			{"speaker": "내레이션", "text": "언덕을 오를수록 성문 앞의 함성과 발걸음이 점점 크게 들려왔다.", "sound": "footsteps"},
+			{"speaker": "군중", "text": "호산나! 다윗의 자손이여!", "sound": "crowd_swell"},
+			{"speaker": "군중", "text": "주의 이름으로 오시는 이여, 찬송하리로다!"},
+			{"speaker": "손끝", "text": "군중이 옷과 종려나무 가지를 길 위에 펼치고 있다.", "interaction": {"type": "palm_drag", "title": "종려잎을 길에 놓기", "instruction": "종려잎 세 장을 빛나는 길 위로 끌어 놓으세요.", "required": 3}},
+			{"speaker": "내레이션", "text": "나귀를 탄 스승님의 모습이 환호하는 사람들 사이로 천천히 다가왔다.", "event": "reveal_characters"},
+			{"speaker": "플레이어", "text": "스승님, 사람들이 정말 많습니다."},
+			{"speaker": "예수", "text": "이들의 외침은 오래가지 못할 것이다. 그러나 지금은… 함께 기뻐하자.", "event": "focus_jesus"},
 			{"speaker": "선택", "text": "스승님의 말에 어떻게 답할까?", "choices": ["무슨 뜻이신지 잘 모르겠습니다.", "저는 그냥 이 순간이 좋습니다."], "responses": [{"speaker": "예수", "text": "때가 되면 알게 될 것이다."}, {"speaker": "예수", "text": "그래, 지금은 그래도 좋다."}]},
-			{"speaker": "내레이션", "text": "나는 알지 못했다. 이 환호가 며칠 뒤 어떤 외침으로 바뀔지."}
+			{"speaker": "내레이션", "text": "군중의 환호 속에서 스승님은 성문 안으로 들어가셨다.", "event": "crowd_fade"},
+			{"speaker": "내레이션", "text": "나는 알지 못했다. 이 환호가 며칠 뒤 어떤 외침으로 바뀔지.", "event": "prepare_exit"}
 		]
 	},
 	{

@@ -1,5 +1,7 @@
 extends Control
 
+const DiscipleTheme = preload("res://scripts/ui_theme.gd")
+
 @onready var background: TextureRect = $Background
 @onready var center: VBoxContainer = $Center
 @onready var settings_layer: Control = $SettingsLayer
@@ -11,7 +13,9 @@ extends Control
 var transitioning := false
 
 func _ready() -> void:
-	$Center/StartButton.pressed.connect(_open_chapters)
+	DiscipleTheme.apply_menu(self)
+	$Center/StartButton.pressed.connect(_continue_story)
+	$Center/JourneyButton.pressed.connect(_open_chapters)
 	$Center/SettingsButton.pressed.connect(_open_settings)
 	$SettingsLayer/SettingsPanel/Box/TextSpeed.item_selected.connect(_set_text_speed)
 	$SettingsLayer/SettingsPanel/Box/VolumeSlider.value_changed.connect(_set_master_volume)
@@ -20,6 +24,7 @@ func _ready() -> void:
 	$SettingsLayer/Dim.gui_input.connect(_on_settings_dim_input)
 	settings_layer.hide()
 	_sync_settings_controls()
+	$Center/StartButton.text = "이야기 시작  ›" if GameState.current_chapter == 1 else "이야기 계속  ›"
 	_play_intro()
 
 func _sync_settings_controls() -> void:
@@ -47,7 +52,13 @@ func _play_intro() -> void:
 	await get_tree().create_timer(0.95).timeout
 	transitioning = false
 
+func _continue_story() -> void:
+	_transition_to(GameState.get_continue_scene())
+
 func _open_chapters() -> void:
+	_transition_to("res://scenes/menu/chapter_select.tscn")
+
+func _transition_to(scene_path: String) -> void:
 	if transitioning:
 		return
 	transitioning = true
@@ -55,7 +66,7 @@ func _open_chapters() -> void:
 	tween.tween_property(fade_rect, "color:a", 1.0, 0.55).set_trans(Tween.TRANS_SINE)
 	tween.tween_property(center, "modulate:a", 0.0, 0.35)
 	await tween.finished
-	get_tree().change_scene_to_file("res://scenes/menu/chapter_select.tscn")
+	get_tree().change_scene_to_file(scene_path)
 
 func _open_settings() -> void:
 	if transitioning or settings_layer.visible:

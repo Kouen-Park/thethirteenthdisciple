@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/speech_bubble.gd" id="1_bubble"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBubble"]
+bg_color = Color(0.964706, 0.898039, 0.737255, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.243137, 0.168627, 0.145098, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+content_margin_left = 8.0
+content_margin_top = 5.0
+content_margin_right = 8.0
+content_margin_bottom = 5.0
+
+[node name="SpeechBubble" type="PanelContainer"]
+offset_right = 178.0
+offset_bottom = 48.0
+theme_override_styles/panel = SubResource("StyleBubble")
+script = ExtResource("1_bubble")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Margin"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.243137, 0.168627, 0.145098, 1)
+theme_override_font_sizes/font_size = 12
+text = "..."
+vertical_alignment = 1

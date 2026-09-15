@@ -1,5 +1,165 @@
-[gd_scene load_steps=2 format=3]
-[ext_resource type="PackedScene" path="res://scenes/common/chapter_scene.tscn" id="1"]
-[node name="Chapter06Resurrection" instance=ExtResource("1")]
-chapter_index = 5
-finish_scene_path = "res://scenes/chapters/epilogue.tscn"
+[gd_scene load_steps=7 format=3]
+[ext_resource type="Script" path="res://scripts/late_world_chapter.gd" id="1_controller"]
+[ext_resource type="PackedScene" path="res://scenes/common/crowd_player.tscn" id="4_player"]
+[ext_resource type="Script" path="res://scripts/pixel_follow_camera.gd" id="5_camera"]
+[ext_resource type="Script" path="res://scripts/speech_bubble_controller.gd" id="6_bubbles"]
+[ext_resource type="PackedScene" path="res://scenes/common/speech_bubble.tscn" id="7_bubble_scene"]
+
+[sub_resource type="StyleBoxFlat" id="ChoicePanelStyle"]
+bg_color = Color(0.10, 0.07, 0.045, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.86, 0.64, 0.33, 0.94)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+
+[node name="Chapter06World" type="Node2D"]
+script = ExtResource("1_controller")
+chapter_number = 6
+
+[node name="Background" type="Sprite2D" parent="."]
+texture_filter = 1
+centered = false
+
+[node name="Actors" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("4_player")]
+position = Vector2(150, 590)
+movement_bounds = Rect2(54, 386, 1940, 294)
+
+[node name="WorldCamera" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+enabled = true
+script = ExtResource("5_camera")
+target_path = NodePath("../Player")
+world_rect = Rect2(0, 0, 2048, 720)
+
+[node name="SpeechBubbleController" type="CanvasLayer" parent="."]
+script = ExtResource("6_bubbles")
+bubble_scene = ExtResource("7_bubble_scene")
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+layer = 30
+
+[node name="HeaderShade" type="ColorRect" parent="UILayer"]
+offset_right = 1280.0
+offset_bottom = 96.0
+mouse_filter = 2
+color = Color(0.08, 0.055, 0.035, 0.42)
+
+[node name="Header" type="Control" parent="UILayer"]
+offset_top = 22.0
+offset_right = 1280.0
+offset_bottom = 85.0
+
+[node name="Title" type="Label" parent="UILayer/Header"]
+offset_right = 1280.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.08, 0.04, 0.01, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 21
+text = "제6장 · 빈자리의 증언"
+horizontal_alignment = 1
+
+[node name="Place" type="Label" parent="UILayer/Header"]
+offset_top = 30.0
+offset_right = 1280.0
+offset_bottom = 55.0
+theme_override_colors/font_color = Color(1, 0.95, 0.79, 1)
+theme_override_colors/font_shadow_color = Color(0.08, 0.04, 0.01, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
+text = "무덤으로 향하는 새벽길"
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="UILayer/Header"]
+offset_left = 16.0
+offset_top = 4.0
+offset_right = 92.0
+offset_bottom = 38.0
+text = "나가기"
+
+[node name="Objective" type="Label" parent="UILayer"]
+offset_left = 24.0
+offset_top = 104.0
+offset_right = 880.0
+offset_bottom = 142.0
+theme_override_colors/font_color = Color(1, 0.94, 0.77, 1)
+theme_override_colors/font_shadow_color = Color(0.05, 0.03, 0.02, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+text = "현장의 흔적과 상반된 증언을 확인하세요."
+
+[node name="InteractionPrompt" type="Label" parent="UILayer"]
+visible = false
+offset_left = 350.0
+offset_top = 652.0
+offset_right = 930.0
+offset_bottom = 696.0
+theme_override_colors/font_color = Color(1, 0.86, 0.48, 1)
+theme_override_colors/font_shadow_color = Color(0.05, 0.03, 0.02, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 18
+text = "E  살펴보기"
+horizontal_alignment = 1
+
+[node name="ChoicePanel" type="PanelContainer" parent="UILayer"]
+visible = false
+offset_left = 215.0
+offset_top = 424.0
+offset_right = 1065.0
+offset_bottom = 704.0
+theme_override_styles/panel = SubResource("ChoicePanelStyle")
+
+[node name="Box" type="VBoxContainer" parent="UILayer/ChoicePanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Question" type="Label" parent="UILayer/ChoicePanel/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.78, 0.43, 1)
+theme_override_font_sizes/font_size = 20
+text = "어둠 속의 발소리 앞에서, 나는 어떻게 움직일까?"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Order" type="Button" parent="UILayer/ChoicePanel/Box"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+theme_override_font_sizes/font_size = 16
+text = "소리를 따라간다"
+
+[node name="Prayer" type="Button" parent="UILayer/ChoicePanel/Box"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+theme_override_font_sizes/font_size = 16
+text = "거리를 두고 지켜본다"
+
+[node name="Uncertain" type="Button" parent="UILayer/ChoicePanel/Box"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+theme_override_font_sizes/font_size = 16
+text = "달아나는 청년을 돕는다"
+
+[node name="FadeLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="Fade" type="ColorRect" parent="FadeLayer"]
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.035, 0.025, 0.02, 1)

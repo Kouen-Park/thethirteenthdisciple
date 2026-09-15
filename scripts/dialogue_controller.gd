@@ -34,12 +34,15 @@ func setup(
 	dialogue_label: Label,
 	advance_button: Button,
 	choice_a: Button,
-	choice_b: Button
+	choice_b: Button,
+	choice_c: Button = null
 ) -> void:
 	_speaker_label = speaker_label
 	_dialogue_label = dialogue_label
 	_advance_button = advance_button
 	_choice_buttons = [choice_a, choice_b]
+	if choice_c:
+		_choice_buttons.append(choice_c)
 
 	if not _advance_button.pressed.is_connected(advance):
 		_advance_button.pressed.connect(advance)

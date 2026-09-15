@@ -78,7 +78,7 @@ func _select(index: int) -> void:
 	selected.emit(option_id, description)
 	progress_changed.emit(1, _options.size())
 	queue_redraw()
-	await get_tree().create_timer(0.35).timeout
+	await get_tree().create_timer(0.35, false).timeout
 	completed.emit()
 
 func _draw() -> void:

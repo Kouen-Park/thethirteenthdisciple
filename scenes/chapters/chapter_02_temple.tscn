@@ -1,0 +1,458 @@
+[gd_scene load_steps=23 format=3]
+
+[ext_resource type="Script" path="res://scripts/chapter_02_temple.gd" id="1_controller"]
+[ext_resource type="Texture2D" path="res://assets/art/chapter02/temple_market.png" id="2_background"]
+[ext_resource type="Texture2D" path="res://assets/art/chapter02/investigation_props_clean.png" id="3_props"]
+[ext_resource type="PackedScene" path="res://scenes/common/crowd_player.tscn" id="4_player"]
+[ext_resource type="Script" path="res://scripts/pixel_follow_camera.gd" id="5_camera"]
+[ext_resource type="Script" path="res://scripts/speech_bubble_controller.gd" id="6_bubbles"]
+[ext_resource type="PackedScene" path="res://scenes/common/speech_bubble.tscn" id="7_bubble_scene"]
+[ext_resource type="Script" path="res://scripts/chapter_director.gd" id="8_director"]
+[ext_resource type="Script" path="res://scripts/interactable_component.gd" id="9_interactable"]
+[ext_resource type="Texture2D" path="res://assets/art/pixel/npcs/merchant_jonah.png" id="10_jonah"]
+[ext_resource type="Texture2D" path="res://assets/art/pixel/npcs/miriam.png" id="11_miriam"]
+[ext_resource type="Texture2D" path="res://assets/art/pixel/npcs/temple_guard.png" id="12_guard"]
+[ext_resource type="Script" path="res://scripts/chapter_02_audio.gd" id="13_audio"]
+[ext_resource type="AudioStream" path="res://assets/audio/chapter02/market_aftermath.wav" id="14_market"]
+[ext_resource type="AudioStream" path="res://assets/audio/chapter02/prayer_court.wav" id="15_prayer"]
+
+[sub_resource type="AtlasTexture" id="CoinsAtlas"]
+atlas = ExtResource("3_props")
+region = Rect2(0, 0, 724, 724)
+
+[sub_resource type="AtlasTexture" id="TableAtlas"]
+atlas = ExtResource("3_props")
+region = Rect2(724, 0, 724, 724)
+
+[sub_resource type="AtlasTexture" id="PrayerAtlas"]
+atlas = ExtResource("3_props")
+region = Rect2(1448, 0, 724, 724)
+
+[sub_resource type="CircleShape2D" id="InteractionShape"]
+radius = 48.0
+
+[sub_resource type="RectangleShape2D" id="NpcBodyShape"]
+size = Vector2(28, 16)
+
+[sub_resource type="RectangleShape2D" id="CoinsBodyShape"]
+size = Vector2(78, 20)
+
+[sub_resource type="RectangleShape2D" id="TableBodyShape"]
+size = Vector2(108, 38)
+
+[sub_resource type="RectangleShape2D" id="PrayerBodyShape"]
+size = Vector2(104, 34)
+
+[sub_resource type="RectangleShape2D" id="HorizontalBoundary"]
+size = Vector2(2048, 32)
+
+[sub_resource type="RectangleShape2D" id="VerticalBoundary"]
+size = Vector2(32, 360)
+
+[sub_resource type="RectangleShape2D" id="MarketObstacle"]
+size = Vector2(650, 120)
+
+[sub_resource type="RectangleShape2D" id="TempleObstacle"]
+size = Vector2(790, 70)
+
+[sub_resource type="StyleBoxFlat" id="ChoicePanelStyle"]
+bg_color = Color(0.10, 0.07, 0.045, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.86, 0.64, 0.33, 0.94)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+
+[node name="Chapter02Temple" type="Node2D"]
+script = ExtResource("1_controller")
+
+[node name="Background" type="Sprite2D" parent="."]
+texture_filter = 1
+centered = false
+texture = ExtResource("2_background")
+
+[node name="ScatteredCoins" type="Area2D" parent="."]
+position = Vector2(405, 585)
+collision_layer = 2
+monitorable = true
+script = ExtResource("9_interactable")
+interaction_id = &"scattered_coins"
+prompt_text = "흩어진 동전 모아두기"
+description = "동전은 흙먼지 속에 흩어져 있다. 발자국은 주변을 맴돌지만, 아직 아무도 손을 대지 않았다."
+one_shot = true
+interaction_data = {"dialogue": [{"speaker": "player", "text": "동전은 흙먼지 속에 흩어져 있다. 발자국은 주변을 맴돌지만, 아직 아무도 손을 대지 않았다."}, {"speaker": "player", "text": "몇 닢은 상 아래까지 굴러갔고, 몇 닢은 사람들이 급히 물러난 발자국에 반쯤 묻혔다."}, {"speaker": "player", "text": "돈을 빼앗으려 한 흔적이라기보다, 돈을 만질 틈도 없이 멈춘 자리처럼 보인다."}]}
+
+[node name="Visual" type="Sprite2D" parent="ScatteredCoins"]
+z_index = 6
+texture_filter = 1
+position = Vector2(0, -20)
+scale = Vector2(0.17, 0.17)
+texture = SubResource("CoinsAtlas")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScatteredCoins"]
+shape = SubResource("InteractionShape")
+
+[node name="Body" type="StaticBody2D" parent="ScatteredCoins"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScatteredCoins/Body"]
+position = Vector2(0, 4)
+shape = SubResource("CoinsBodyShape")
+
+[node name="EmptyTable" type="Area2D" parent="."]
+position = Vector2(875, 535)
+collision_layer = 2
+monitorable = true
+script = ExtResource("9_interactable")
+interaction_id = &"empty_table"
+prompt_text = "뒤집힌 상 옆으로 밀기"
+description = "상판에는 급히 짚은 손바닥 자국이 남아 있다. 물건은 사라졌지만 나무는 아직 비스듬히 눌려 있다."
+one_shot = true
+interaction_data = {"dialogue": [{"speaker": "player", "text": "상판에는 급히 짚은 손바닥 자국이 남아 있다. 물건은 사라졌지만 나무는 아직 비스듬히 눌려 있다."}, {"speaker": "player", "text": "상을 다시 세우면 이 흔적을 지우게 된다. 그대로 둔 채 통로만 확보하자."}, {"speaker": "player", "text": "분노가 남긴 자리인지, 경고가 남긴 자리인지는 이것만으로 알 수 없다."}]}
+
+[node name="Visual" type="Sprite2D" parent="EmptyTable"]
+z_index = 6
+texture_filter = 1
+position = Vector2(0, -30)
+scale = Vector2(0.18, 0.18)
+texture = SubResource("TableAtlas")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EmptyTable"]
+shape = SubResource("InteractionShape")
+
+[node name="Body" type="StaticBody2D" parent="EmptyTable"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EmptyTable/Body"]
+position = Vector2(0, 2)
+shape = SubResource("TableBodyShape")
+
+[node name="PrayerCorner" type="Area2D" parent="."]
+position = Vector2(1480, 520)
+collision_layer = 2
+monitorable = true
+script = ExtResource("9_interactable")
+interaction_id = &"prayer_corner"
+prompt_text = "기도 자리의 천 펼치기"
+description = "상인들의 목소리가 사라진 자리에 작은 기도 자리가 드러났다. 바닥에는 오래 머문 무릎 자국만 남아 있다."
+one_shot = true
+interaction_data = {"dialogue": [{"speaker": "player", "text": "상인들의 목소리가 사라진 자리에 작은 기도 자리가 드러났다."}, {"speaker": "player", "text": "벽 가까운 바닥에는 오래 머문 무릎 자국이 있고, 그 옆의 먼지만 조용히 가라앉아 있다."}, {"speaker": "player", "text": "이 자리는 새로 생긴 것이 아니다. 소음에 가려져 보이지 않았던 자리다."}]}
+
+[node name="Visual" type="Sprite2D" parent="PrayerCorner"]
+z_index = 6
+texture_filter = 1
+position = Vector2(0, -36)
+scale = Vector2(0.19, 0.19)
+texture = SubResource("PrayerAtlas")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PrayerCorner"]
+shape = SubResource("InteractionShape")
+
+[node name="Body" type="StaticBody2D" parent="PrayerCorner"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PrayerCorner/Body"]
+position = Vector2(0, 3)
+shape = SubResource("PrayerBodyShape")
+
+[node name="MerchantJonah" type="Area2D" parent="."]
+position = Vector2(610, 635)
+collision_layer = 2
+monitorable = true
+script = ExtResource("9_interactable")
+interaction_id = &"merchant_jonah"
+prompt_text = "요나의 증언 듣기"
+description = "또 왔군. 상을 뒤엎으면 그날 장사를 망치는 것으로 끝날 것 같나? 질서가 무너지면 그 다음 소란의 값도 우리 같은 상인이 치러."
+one_shot = true
+dim_on_use = false
+interaction_data = {"dialogue": [{"speaker": "player", "text": "요나, 여기서 무슨 일이 있었습니까?"}, {"speaker": "target", "text": "또 왔군. 그 사람이 상들을 뒤엎었어. 사람들은 놀라 달아났고 장사는 그대로 끝났지."}, {"speaker": "player", "text": "기도할 자리를 되찾으려 했다는 말도 들었습니다."}, {"speaker": "target", "text": "뜻이 좋으면 질서를 깨도 되는 건가? 다음 소란의 값은 늘 우리 같은 사람이 치러."}]}
+metadata/display_name = "상인 요나"
+metadata/head_offset = Vector2(0, -72)
+
+[node name="Visual" type="Sprite2D" parent="MerchantJonah"]
+z_index = 9
+texture_filter = 1
+position = Vector2(0, -34)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("10_jonah")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MerchantJonah"]
+position = Vector2(0, -16)
+shape = SubResource("InteractionShape")
+
+[node name="Body" type="StaticBody2D" parent="MerchantJonah"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MerchantJonah/Body"]
+position = Vector2(0, -8)
+shape = SubResource("NpcBodyShape")
+
+[node name="Miriam" type="Area2D" parent="."]
+position = Vector2(1640, 635)
+collision_layer = 2
+monitorable = true
+script = ExtResource("9_interactable")
+interaction_id = &"miriam"
+prompt_text = "미리암의 증언 듣기"
+description = "당신도 왔군요. 돈이 없는 사람들은 여기서 늘 가장자리로 밀려났어요. 지금은 비로소 누구든 머물 수 있는 자리가 보여요."
+one_shot = true
+dim_on_use = false
+interaction_data = {"dialogue": [{"speaker": "player", "text": "미리암, 당신은 이 일을 어떻게 보았습니까?"}, {"speaker": "target", "text": "사람들은 제물을 사려고 값을 묻고 또 물었어요. 기도하러 온 사람의 목소리는 그 사이에서 들리지 않았고요."}, {"speaker": "player", "text": "하지만 누군가는 오늘의 장사를 잃었습니다."}, {"speaker": "target", "text": "알아요. 그래도 지금은 돈이 없는 사람도 밀려나지 않고 머물 수 있는 자리가 보여요."}]}
+metadata/display_name = "미리암"
+metadata/head_offset = Vector2(0, -72)
+
+[node name="Visual" type="Sprite2D" parent="Miriam"]
+z_index = 9
+texture_filter = 1
+position = Vector2(0, -34)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("11_miriam")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Miriam"]
+position = Vector2(0, -16)
+shape = SubResource("InteractionShape")
+
+[node name="Body" type="StaticBody2D" parent="Miriam"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Miriam/Body"]
+position = Vector2(0, -8)
+shape = SubResource("NpcBodyShape")
+
+[node name="TempleGuard" type="Area2D" parent="."]
+position = Vector2(1160, 445)
+collision_layer = 2
+monitorable = true
+script = ExtResource("9_interactable")
+interaction_id = &"temple_guard"
+prompt_text = "성전 경비의 증언 듣기 (선택)"
+description = "누가 먼저 옳았는지는 내 일이 아니오. 나는 사람들이 또 몰려와 서로를 밀치기 시작할까 그게 걱정이오."
+one_shot = true
+dim_on_use = false
+interaction_data = {"dialogue": [{"speaker": "player", "text": "경비가 본 일은 무엇입니까?"}, {"speaker": "target", "text": "고함이 들렸고 상이 넘어졌소. 상인들이 물러났고, 구경꾼은 더 가까이 몰려들었지."}, {"speaker": "player", "text": "누가 먼저 폭력을 시작했습니까?"}, {"speaker": "target", "text": "그보다 나는 사람들이 다시 서로를 밀치기 시작할까 걱정이오. 한 번 커진 군중은 누구의 말도 듣지 않으니."}]}
+metadata/display_name = "성전 경비"
+metadata/head_offset = Vector2(0, -72)
+
+[node name="Visual" type="Sprite2D" parent="TempleGuard"]
+z_index = 9
+texture_filter = 1
+position = Vector2(0, -34)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("12_guard")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TempleGuard"]
+position = Vector2(0, -16)
+shape = SubResource("InteractionShape")
+
+[node name="Body" type="StaticBody2D" parent="TempleGuard"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TempleGuard/Body"]
+position = Vector2(0, -8)
+shape = SubResource("NpcBodyShape")
+
+[node name="TempleExit" type="Area2D" parent="."]
+position = Vector2(1940, 455)
+collision_layer = 2
+monitorable = true
+script = ExtResource("9_interactable")
+interaction_id = &"temple_exit"
+prompt_text = "성전 안쪽으로 향하기"
+interaction_enabled = false
+dim_on_use = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TempleExit"]
+shape = SubResource("InteractionShape")
+
+[node name="ExitInside" type="Marker2D" parent="."]
+position = Vector2(2030, 455)
+
+[node name="EchoAnchor" type="Marker2D" parent="."]
+position = Vector2(1530, 350)
+metadata/display_name = "멀리서 들린 목소리"
+metadata/head_offset = Vector2(0, 0)
+
+[node name="Player" parent="." instance=ExtResource("4_player")]
+position = Vector2(150, 590)
+movement_bounds = Rect2(54, 386, 1940, 294)
+
+[node name="WorldCamera" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+enabled = true
+script = ExtResource("5_camera")
+target_path = NodePath("../Player")
+world_rect = Rect2(0, 0, 2048, 720)
+
+[node name="SpeechBubbleController" type="CanvasLayer" parent="."]
+script = ExtResource("6_bubbles")
+bubble_scene = ExtResource("7_bubble_scene")
+
+[node name="ChapterDirector" type="Node" parent="."]
+script = ExtResource("8_director")
+chapter_id = &"chapter_02"
+
+[node name="ChapterAudio" type="Node" parent="."]
+script = ExtResource("13_audio")
+
+[node name="Audio" type="Node2D" parent="."]
+
+[node name="Market" type="AudioStreamPlayer2D" parent="Audio"]
+position = Vector2(410, 500)
+stream = ExtResource("14_market")
+volume_db = -12.0
+
+[node name="Prayer" type="AudioStreamPlayer2D" parent="Audio"]
+position = Vector2(1590, 500)
+stream = ExtResource("15_prayer")
+volume_db = -24.0
+
+[node name="WorldBounds" type="Node2D" parent="."]
+
+[node name="TopMarket" type="StaticBody2D" parent="WorldBounds"]
+position = Vector2(430, 348)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds/TopMarket"]
+shape = SubResource("MarketObstacle")
+
+[node name="TopTemple" type="StaticBody2D" parent="WorldBounds"]
+position = Vector2(1560, 342)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds/TopTemple"]
+shape = SubResource("TempleObstacle")
+
+[node name="Bottom" type="StaticBody2D" parent="WorldBounds"]
+position = Vector2(1024, 704)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds/Bottom"]
+shape = SubResource("HorizontalBoundary")
+
+[node name="Left" type="StaticBody2D" parent="WorldBounds"]
+position = Vector2(16, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds/Left"]
+shape = SubResource("VerticalBoundary")
+
+[node name="Right" type="StaticBody2D" parent="WorldBounds"]
+position = Vector2(2032, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds/Right"]
+shape = SubResource("VerticalBoundary")
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+layer = 30
+
+[node name="HeaderShade" type="ColorRect" parent="UILayer"]
+offset_right = 1280.0
+offset_bottom = 96.0
+mouse_filter = 2
+color = Color(0.08, 0.055, 0.035, 0.42)
+
+[node name="Header" type="Control" parent="UILayer"]
+offset_top = 22.0
+offset_right = 1280.0
+offset_bottom = 85.0
+
+[node name="Title" type="Label" parent="UILayer/Header"]
+offset_right = 1280.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.08, 0.04, 0.01, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 21
+text = "제2장 · 성전의 소음"
+horizontal_alignment = 1
+
+[node name="Place" type="Label" parent="UILayer/Header"]
+offset_top = 30.0
+offset_right = 1280.0
+offset_bottom = 55.0
+theme_override_colors/font_color = Color(1, 0.95, 0.79, 1)
+theme_override_colors/font_shadow_color = Color(0.08, 0.04, 0.01, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
+text = "예루살렘 성전 바깥 시장"
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="UILayer/Header"]
+offset_left = 16.0
+offset_top = 4.0
+offset_right = 92.0
+offset_bottom = 38.0
+text = "나가기"
+
+[node name="Objective" type="Label" parent="UILayer"]
+offset_left = 24.0
+offset_top = 104.0
+offset_right = 880.0
+offset_bottom = 142.0
+theme_override_colors/font_color = Color(1, 0.94, 0.77, 1)
+theme_override_colors/font_shadow_color = Color(0.05, 0.03, 0.02, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+text = "현장의 흔적과 상반된 증언을 확인하세요."
+
+[node name="InteractionPrompt" type="Label" parent="UILayer"]
+visible = false
+offset_left = 350.0
+offset_top = 652.0
+offset_right = 930.0
+offset_bottom = 696.0
+theme_override_colors/font_color = Color(1, 0.86, 0.48, 1)
+theme_override_colors/font_shadow_color = Color(0.05, 0.03, 0.02, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 18
+text = "E  살펴보기"
+horizontal_alignment = 1
+
+[node name="ChoicePanel" type="PanelContainer" parent="UILayer"]
+visible = false
+offset_left = 215.0
+offset_top = 424.0
+offset_right = 1065.0
+offset_bottom = 704.0
+theme_override_styles/panel = SubResource("ChoicePanelStyle")
+
+[node name="Box" type="VBoxContainer" parent="UILayer/ChoicePanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Question" type="Label" parent="UILayer/ChoicePanel/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.78, 0.43, 1)
+theme_override_font_sizes/font_size = 20
+text = "그가 떠난 뒤 남은 이 자리를, 나는 어떻게 보았는가?"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Order" type="Button" parent="UILayer/ChoicePanel/Box"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+theme_override_font_sizes/font_size = 16
+text = "소란은 질서를 더 무너뜨렸다."
+
+[node name="Prayer" type="Button" parent="UILayer/ChoicePanel/Box"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+theme_override_font_sizes/font_size = 16
+text = "기도할 자리를 되찾기 위한 행동이었다."
+
+[node name="Uncertain" type="Button" parent="UILayer/ChoicePanel/Box"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+theme_override_font_sizes/font_size = 16
+text = "아직 어느 쪽도 단정할 수 없다."
+
+[node name="FadeLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="Fade" type="ColorRect" parent="FadeLayer"]
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.035, 0.025, 0.02, 1)

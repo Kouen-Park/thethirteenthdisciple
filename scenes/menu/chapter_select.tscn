@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/chapter_select.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/art/chapter01/background.png" id="2_background"]
+[ext_resource type="Texture2D" path="res://assets/art/pixel/chapter01_jerusalem_gate_world_2048.png" id="2_background"]
 
 [node name="ChapterSelect" type="Control"]
 layout_mode = 3
@@ -56,7 +56,7 @@ offset_top = 48.0
 offset_bottom = 80.0
 theme_override_colors/font_color = Color(1, 0.9, 0.64, 1)
 theme_override_font_sizes/font_size = 26
-text = "여정 선택"
+text = "장면 선택"
 horizontal_alignment = 1
 
 [node name="Chapters" type="VBoxContainer" parent="."]
@@ -76,25 +76,25 @@ theme_override_constants/separation = 8
 
 [node name="Chapter1" type="Button" parent="Chapters"]
 layout_mode = 2
-text = "제1장 · 예루살렘 입성"
+text = "제1장 · 군중 속의 낯선 사람"
 [node name="Chapter2" type="Button" parent="Chapters"]
 layout_mode = 2
-text = "제2장 · 최후의 만찬"
+text = "제2장 · 성전의 소음"
 [node name="Chapter3" type="Button" parent="Chapters"]
 layout_mode = 2
-text = "제3장 · 겟세마네"
+text = "제3장 · 사라진 자리"
 [node name="Chapter4" type="Button" parent="Chapters"]
 layout_mode = 2
-text = "제4장 · 재판과 십자가의 길"
+text = "제4장 · 서로 다른 외침"
 [node name="Chapter5" type="Button" parent="Chapters"]
 layout_mode = 2
-text = "제5장 · 골고다"
+text = "제5장 · 끝까지 바라본 사람들"
 [node name="Chapter6" type="Button" parent="Chapters"]
 layout_mode = 2
-text = "제6장 · 부활"
+text = "제6장 · 빈자리의 증언"
 [node name="Epilogue" type="Button" parent="Chapters"]
 layout_mode = 2
-text = "에필로그 · 오늘의 한 걸음"
+text = "에필로그 · 당신은 어디에 서 있었습니까"
 
 [node name="BackButton" type="Button" parent="."]
 layout_mode = 1

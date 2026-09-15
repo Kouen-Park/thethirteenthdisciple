@@ -25,7 +25,7 @@ func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, size), sky_color)
 	match chapter_index:
 		0: _draw_entry()
-		1: _draw_supper()
+		1: _draw_temple_aftermath()
 		2: _draw_garden()
 		3: _draw_trial()
 		4: _draw_golgotha()
@@ -49,7 +49,7 @@ func _draw_entry() -> void:
 	draw_circle(Vector2(size.x * 0.79, horizon + 39), 6, Color("#49373e"))
 	draw_rect(Rect2(size.x * 0.79 - 7, horizon + 45, 14, 25), Color("#efe4cf"))
 
-func _draw_supper() -> void:
+func _draw_temple_aftermath() -> void:
 	draw_rect(Rect2(18, 160, size.x - 36, 340), Color("#201c28"))
 	for x in [65.0, size.x - 65.0]:
 		var flame := sin(elapsed * 5.0 + x) * 3.0

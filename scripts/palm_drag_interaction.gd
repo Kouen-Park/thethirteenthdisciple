@@ -13,6 +13,7 @@ var _drop_rect := Rect2()
 var _initialized := false
 var _is_complete := false
 var _last_layout_size := Vector2.ZERO
+var active := false
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -26,6 +27,7 @@ func configure(interaction: Dictionary) -> void:
 func reset_interaction() -> void:
 	_initialized = false
 	_is_complete = false
+	active = true
 	_dragging_index = -1
 	_layout_interaction()
 	progress_changed.emit(0, required_count)
@@ -107,8 +109,31 @@ func _end_drag(pointer_position: Vector2) -> void:
 	queue_redraw()
 	if count >= required_count:
 		_is_complete = true
-		await get_tree().create_timer(0.45).timeout
+		active = false
+		await get_tree().create_timer(0.45, false).timeout
 		completed.emit()
+
+## Keyboard-accessible and testable equivalent of dragging a leaf into the road.
+func place_leaf(index: int) -> bool:
+	if _is_complete or index < 0 or index >= _leaves.size() or _leaves[index].placed:
+		return false
+	var leaf := _leaves[index]
+	leaf.placed = true
+	var next_slot := _placed_count()
+	leaf.position = Vector2(
+		_drop_rect.position.x + _drop_rect.size.x * (float(next_slot) / float(required_count + 1)),
+		_drop_rect.get_center().y + (next_slot % 2) * 18.0 - 9.0
+	)
+	_leaves[index] = leaf
+	var count := _placed_count()
+	progress_changed.emit(count, required_count)
+	queue_redraw()
+	if count >= required_count:
+		_is_complete = true
+		active = false
+		await get_tree().create_timer(0.45, false).timeout
+		completed.emit()
+	return true
 
 func _pick_leaf(pointer_position: Vector2) -> int:
 	for index in range(_leaves.size() - 1, -1, -1):

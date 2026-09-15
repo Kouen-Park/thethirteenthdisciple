@@ -21,6 +21,7 @@ z_index = -2
 position = Vector2(0, -18)
 polygon = PackedVector2Array(-25, 0, -19, -5, -8, -7, 8, -7, 20, -3, 25, 0, 18, 5, 6, 7, -9, 6, -21, 3)
 color = Color(0.08, 0.06, 0.07, 0.34)
+scale = Vector2(0.82, 0.82)
 
 [node name="Sprite" type="Sprite2D" parent="."]
 z_index = 1
@@ -31,7 +32,7 @@ hframes = 2
 vframes = 1
 frame = 0
 position = Vector2(0, -52)
-scale = Vector2(0.09, 0.09)
+scale = Vector2(0.075, 0.075)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -8)
@@ -46,3 +47,5 @@ collision_mask = 2
 position_smoothing_enabled = true
 position_smoothing_speed = 4.0
 enabled = false
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
